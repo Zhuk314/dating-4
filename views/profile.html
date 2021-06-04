@@ -1,0 +1,89 @@
+<!--328/dating/views/profile.html-->
+<!--
+Name: Yurii Zhuk
+Date: 05/07/2021
+File Name: profile.html
+-->
+<!doctype html>
+<html lang="en">
+<head>
+    <include href="views/includes/head_links.html" />
+
+    <title>Profile</title>
+</head>
+
+
+<body class="bg-light">
+
+<!-- Container for main content -->
+<div class="container">
+    <include href="views/includes/navBar.html" />
+    <div class="border rounded p-3 bg-white mt-2">
+        <h2>Profile</h2>
+        <hr>
+
+        <form method="post">
+            <div class="row">
+                <!--Left field-->
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="email" class="font-weight-bold">Email</label>
+                        <input type="text" class="form-control" id="email" name="email"
+                               placeholder="example@gmail.com" value="{{ @email }}">
+                        <check if="{{ isset(@errors['email']) }}">
+                            <span class="text-danger">{{ @errors['email'] }}</span>
+                        </check>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="state" class="font-weight-bold">State</label>
+                        <select id="state" class="form-control" name="state" aria-label="Select State">
+                            <repeat group="{{ @states }}" value="{{ @state }}">
+                                <option value="{{ @state }}"
+                                <check if="{{ @state == @userState }}">selected="selected"</check>
+                                >{{ @state }}</option>
+                            </repeat>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="font-weight-bold">Seeking</label>
+                        <div id="gender">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="seeking"
+                                       id="radioSeekingMale" value="male"
+                                <check if="{{ @gender == 'male' }}">checked="checked"</check>
+                                >
+                                <label class="form-check-label" for="radioSeekingMale">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="seeking" id="radioSeekingFemale"
+                                       value="female"
+                                <check if="{{ @gender == 'female' }}">checked="checked"</check>
+                                >
+                                <label class="form-check-label" for="radioSeekingFemale">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Right field-->
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="bio" class="font-weight-bold">Biography</label>
+                        <textarea class="form-control" id="bio" name="bio" rows="6">{{ @bio }}</textarea>
+                    </div>
+
+                </div>
+
+                <include href="views/includes/btnNext.html" />
+            </div>
+        </form>
+
+    </div>
+
+</div><!-- End Container for main content -->
+
+
+</body>
+</html>

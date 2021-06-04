@@ -1,0 +1,78 @@
+<!--328/dating/views/interests.html-->
+<!--
+Name: Yurii Zhuk
+Date: 05/07/2021
+File Name: interests.html
+-->
+<!doctype html>
+<html lang="en">
+<head>
+    <include href="views/includes/head_links.html" />
+
+    <title>Interests</title>
+</head>
+
+
+<body class="bg-light">
+
+<!-- Container for main content -->
+<div class="container ">
+    <include href="views/includes/navBar.html" />
+
+    <div class="border rounded p-3 bg-white mt-2">
+        <h2>Interests</h2>
+        <hr>
+
+        <form method="post">
+            <div>
+
+                <h4>Indoor interests</h4>
+                <check if="{{ isset(@errors['indoor']) }}">
+                    <span class="text-danger">{{ @errors['indoor'] }}</span>
+                </check>
+                <div class="row pl-3 pr-3">
+
+                    <div class="col">
+
+                        <repeat group="{{ @indoorInterests }}" value="{{ @interest }}">
+                            <input type="checkbox" id="{{ @interest }}" name="indoorInterests[]" value="{{ @interest }}"
+                            <check if="{{in_array(@interest, @userIndoorInterests) }}">
+                                checked="checked"
+                            </check>
+                            >
+                            <label for="{{ @interest }}">{{ @interest }}</label><br>
+                        </repeat>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <h4>Outdoor interests</h4>
+                <check if="{{ isset(@errors['outdoor']) }}">
+                    <span class="text-danger">{{ @errors['outdoor'] }}</span>
+                </check>
+                <div class="row pl-3 pr-3">
+                    <div class="col">
+                        <repeat group="{{ @outdoorInterests }}" value="{{ @interest }}">
+                            <input type="checkbox" id="{{ @interest }}" name="outdoorInterests[]" value="{{ @interest }}"
+                            <check if="{{in_array(@interest, @userOutdoorInterests) }}">
+                                checked="checked"
+                            </check>
+                            >
+                            <label for="{{ @interest }}">{{ @interest }}</label><br>
+                        </repeat>
+                    </div>
+
+                </div>
+            </div>
+
+            <include href="views/includes/btnNext.html" />
+        </form>
+    </div>
+
+</div><!-- End Container for main content -->
+
+
+</body>
+</html>

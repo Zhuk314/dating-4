@@ -1,0 +1,97 @@
+<!--328/dating-3/views/personal_info.html-->
+<!--
+Name: Yurii Zhuk
+Date: 05/07/2021
+File Name: personal_info.html
+-->
+<!doctype html>
+<html lang="en">
+<head>
+    <include href="views/includes/head_links.html" />
+
+    <title>Personal Information!</title>
+</head>
+
+
+<body class="bg-light">
+
+<!-- Container for main content -->
+<div class="container">
+    <include href="views/includes/navBar.html" />
+
+    <div class="border rounded p-3 bg-white mt-2">
+        <h2>Personal Information</h2>
+        <hr>
+        <form method="post">
+            <div class="row">
+                <!--Left field-->
+                <div class="col-8">
+                    <div class="form-group">
+                        <label for="fname" class="font-weight-bold">First Name</label>
+                        <input type="text" class="form-control" id="fname" name="fname" placeholder="John" value="{{ @fname }}">
+                        <check if="{{ isset(@errors['indoor']) }}">
+                            <span class="text-danger">{{ @errors['indoor'] }}</span>
+                        </check>
+                    </div>
+                    <div class="form-group">
+                        <label for="lname" class="font-weight-bold">Last Name</label>
+                        <input type="text" class="form-control" id="lname" name="lname" placeholder="Doe" value="{{ @lname }}">
+                        <check if="{{ isset(@errors['lname']) }}">
+                            <span class="text-danger">{{ @errors['lname'] }}</span>
+                        </check>
+                    </div>
+                    <div class="form-group">
+                        <label for="age" class="font-weight-bold">Age</label>
+                        <input type="number" class="form-control" id="age" name="age" placeholder="30" value="{{ @age }}">
+                        <check if="{{ isset(@errors['age']) }}">
+                            <span class="text-danger">{{ @errors['age'] }}</span>
+                        </check>
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold">Gender</label>
+                        <div id="gender">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="radioUserMale" value="male"
+                                <check if="{{ @gender == 'male' }}">checked="checked"</check>>
+                                <label class="form-check-label" for="radioUserMale">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="radioUserFemale" value="female"
+                                <check if="{{ @gender == 'female' }}">checked="checked"</check>>
+                                <label class="form-check-label" for="radioUserFemale">Female</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" class="font-weight-bold">Phone Number</label>
+                        <input type="text" class="form-control" id="phone" name="phone" placeholder="xxxxxxxxxx" value=" {{@phone}}">
+                        <check if="{{ isset(@errors['phone']) }}">
+                            <span class="text-danger">{{ @errors['phone'] }}</span>
+                        </check>
+                    </div>
+                </div>
+
+                <!--Right field-->
+                <div class="col-4 ">
+                    <div class="jumbotron text-center border border-secondary p-2 mt-4">
+                        <p>
+                            <strong>Note: </strong>All information entered is protected by our
+                            <a href="#">Privacy Policy</a>. Profile information can only
+                            be viewed by others with your permission.
+                        </p>
+                    </div>
+
+                </div>
+
+                <include href="views/includes/btnNext.html" />
+            </div>
+        </form>
+
+    </div>
+
+</div><!-- End Container for main content -->
+
+
+</body>
+</html>
