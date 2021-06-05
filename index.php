@@ -6,7 +6,7 @@
  * Date: 05/07/2021
  * File Name: index.php
  *
- * This file contains and controls all routing on the dating web site
+ * This file contains all routing on the dating web site
  */
 
 //Turn on error reporting
@@ -14,14 +14,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
 //Require autoload file
 require_once ('vendor/autoload.php');
-require_once ('model/validation.php');
-require_once ('model/data-layer.php');
-require_once ('classes/member.php');
-require_once ('classes/premium_member.php');
-require_once ('controller/controller.php');
 
 //Start session
 session_start();

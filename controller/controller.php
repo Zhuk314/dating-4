@@ -1,5 +1,10 @@
 <?php
 
+
+/**
+ * Class Controller controls all routing on the dating web site
+ *
+ */
 class Controller
 {
     private $_f3; //router
