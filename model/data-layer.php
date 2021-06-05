@@ -1,7 +1,11 @@
 <?php
-// returns array of states
-function getStates(){
-    return array(
+class DataLayer
+{
+
+    // returns array of states
+    static function getStates()
+    {
+        return array(
             "Alabama",
             "Alaska",
             "Arizona",
@@ -52,32 +56,35 @@ function getStates(){
             "West Virginia",
             "Wisconsin",
             "Wyoming",
-            );
+        );
 
-}
+    }
 
-// This function will return indoor interests
-function getIndore(){
-    return array(
-        "tv",
-        "puzzles",
-        "movies",
-        "reading",
-        "cooking",
-        "playing cards",
-        "board games",
-        "video games"
-    );
-}
+    // This function will return indoor interests
+    static function getIndore()
+    {
+        return array(
+            "tv",
+            "puzzles",
+            "movies",
+            "reading",
+            "cooking",
+            "playing cards",
+            "board games",
+            "video games"
+        );
+    }
 
-// This function will return outdoor interests
-function getOutdoor(){
-    return array(
-        "hiking",
-        "walking",
-        "biking",
-        "climbing",
-        "swimming",
-        "collecting"
-    );
+    // This function will return outdoor interests
+    static function getOutdoor()
+    {
+        return array(
+            "hiking",
+            "walking",
+            "biking",
+            "climbing",
+            "swimming",
+            "collecting"
+        );
+    }
 }

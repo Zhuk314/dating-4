@@ -79,7 +79,7 @@ $f3->route('GET|POST /personalInfo', function($f3){
 
         // Validate Information //
         // is first name valid?
-        if(validName($_POST['fname'])){
+        if(Validation::validName($_POST['fname'])){
             // Add name to session
             $_SESSION['member']->setFname($fname);
         }//Otherwise, set an error variable in the hive
@@ -88,7 +88,7 @@ $f3->route('GET|POST /personalInfo', function($f3){
         }
 
         // is last name valid?
-        if(validName($_POST['lname'])){
+        if(Validation::validName($_POST['lname'])){
             // Add name to session
             $_SESSION['member']->setLname($lname);
         }//Otherwise, set an error variable in the hive
@@ -97,7 +97,7 @@ $f3->route('GET|POST /personalInfo', function($f3){
         }
 
         // is age valid?
-        if(validAge($_POST['age'])){
+        if(Validation::validAge($_POST['age'])){
             // Add age to session
             $_SESSION['member']->setAge(intval($age));
         }//Otherwise, set an error variable in the hive
@@ -106,7 +106,7 @@ $f3->route('GET|POST /personalInfo', function($f3){
         }
 
         // is phone valid?
-        if(validPhone($_POST['phone'])){
+        if(Validation::validPhone($_POST['phone'])){
             // Add age to session
             $_SESSION['member']->setPhone($phone);
         }//Otherwise, set an error variable in the hive
@@ -171,7 +171,7 @@ $f3->route('GET|POST /profile', function($f3){
 
         // Validate Info and add it to session //
         //is email valid
-        if(validEmail($email)){
+        if(Validation::validEmail($email)){
             $_SESSION['member']->setEmail($email);
         }else{
             $f3->set('errors["email"]', 'Email is not valid. Must contain \'@\' and \'.\'');
@@ -210,7 +210,7 @@ $f3->route('GET|POST /profile', function($f3){
 
 
     //Get states from the Model and send them to the View
-    $f3->set('states', getStates());
+    $f3->set('states', DataLayer::getStates());
 
     //Display the profile.html page
     $view = new Template();
@@ -240,7 +240,7 @@ $f3->route('GET|POST /interests', function($f3){
         // Validate Info and add it to session //
         // are indoor valid
         if(!empty($userIndoorInterests)) {
-            if (validIndoor($userIndoorInterests)) {
+            if (Validation::validIndoor($userIndoorInterests)) {
                 // Add data to session
                 $_SESSION['member']->setInDoorInterests($userIndoorInterests);
             } else {
@@ -253,7 +253,7 @@ $f3->route('GET|POST /interests', function($f3){
 
         // are outdoor valid
         if(!empty($userOutdoorInterests)) {
-            if (validOutdoor($userOutdoorInterests)) {
+            if (Validation::validOutdoor($userOutdoorInterests)) {
                 // Add data to session
                 $_SESSION['member']->setOutDoorInterests($userOutdoorInterests);
             } else {
@@ -272,9 +272,9 @@ $f3->route('GET|POST /interests', function($f3){
     }
 
     //Get the indoor interests from the Model and send them to the View
-    $f3->set('indoorInterests', getIndore());
+    $f3->set('indoorInterests', DataLayer::getIndore());
     //Get the outdoor interests from the Model and send them to the View
-    $f3->set('outdoorInterests', getOutdoor());
+    $f3->set('outdoorInterests', DataLayer::getOutdoor());
 
     //Add the user data to the hive
     $f3->set('userIndoorInterests', $userIndoorInterests);
