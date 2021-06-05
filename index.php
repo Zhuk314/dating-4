@@ -1,6 +1,6 @@
 <?php
 // Git hub:
-// https://github.com/Zhuk314/dating/commits/main/views/home.html
+// https://github.com/Zhuk314/dating-4.git
 /*
  * Name: Yurii Zhuk
  * Date: 05/07/2021
@@ -19,6 +19,8 @@ error_reporting(E_ALL);
 require_once ('vendor/autoload.php');
 require_once ('model/validation.php');
 require_once ('model/data-layer.php');
+require_once ('classes/member.php');
+require_once ('classes/premium_member.php');
 
 //Start session
 session_start();
@@ -36,12 +38,16 @@ $f3->route('GET /', function(){
 
 // Define route for personal_info.html page
 $f3->route('GET|POST /personalInfo', function($f3){
+    //Reinitialize session array
+    $_SESSION = array();
+
     //Initialize variables for user input
     $fname = "";
     $lname = "";
     $age = "";
     $gender = "";
     $phone = "";
+    $premium = "";
 
     // If form submitted, add data to session
     // and move user to the next page
@@ -59,12 +65,23 @@ $f3->route('GET|POST /personalInfo', function($f3){
         $age = $_POST['age'];
         $gender = $_POST['gender'];
         $phone = $_POST['phone'];
+        $premium = $_POST['premium'];
 
-        // Validate information //
+        // Instantiate the appropriate class(Member or PremiumMember)
+        // depending on whether or not the checkbox $premium was selected.
+        // then, add premium 'y' to session if selected, if not, add 'n'
+        if($premium == 'y'){
+            $_SESSION['member'] = new PremiumMember(); //create a new premium member class
+        } else{
+            $_SESSION['member'] = new Member(); //create a new member class
+            $premium = 'n';
+        }
+
+        // Validate Information //
         // is first name valid?
         if(validName($_POST['fname'])){
             // Add name to session
-            $_SESSION['fname'] = $_POST['fname'];
+            $_SESSION['member']->setFname($fname);
         }//Otherwise, set an error variable in the hive
         else {
             $f3->set('errors["fname"]', 'Name is not valid. Must contain only letters.');
@@ -73,7 +90,7 @@ $f3->route('GET|POST /personalInfo', function($f3){
         // is last name valid?
         if(validName($_POST['lname'])){
             // Add name to session
-            $_SESSION['lname'] = $_POST['lname'];
+            $_SESSION['member']->setLname($lname);
         }//Otherwise, set an error variable in the hive
         else {
             $f3->set('errors["lname"]', 'Name is not valid. Must contain only letters.');
@@ -82,7 +99,7 @@ $f3->route('GET|POST /personalInfo', function($f3){
         // is age valid?
         if(validAge($_POST['age'])){
             // Add age to session
-            $_SESSION['age'] = $_POST['age'];
+            $_SESSION['member']->setAge(intval($age));
         }//Otherwise, set an error variable in the hive
         else {
             $f3->set('errors["age"]', 'Age is not valid. Must be between 18 and 118');
@@ -91,15 +108,19 @@ $f3->route('GET|POST /personalInfo', function($f3){
         // is phone valid?
         if(validPhone($_POST['phone'])){
             // Add age to session
-            $_SESSION['phone'] = $_POST['phone'];
+            $_SESSION['member']->setPhone($phone);
         }//Otherwise, set an error variable in the hive
         else {
             $f3->set('errors["phone"]', 'Phone is not valid. Must contain numbers only');
         }
 
         // Add gender to session with no validation(yet)
-        $_SESSION['gender'] = $_POST['gender'];
-
+        if($gender == 'male' || $gender == 'female'){
+            $_SESSION['member']->setGender($gender);
+        }
+        else {
+            $f3->set('errors["gender"]', 'Please, select gender');
+        }
 
         // if no errors redirect to profile page
         if (empty($f3->get('errors'))) {
@@ -107,6 +128,11 @@ $f3->route('GET|POST /personalInfo', function($f3){
             header('location: profile');
         }
 
+        /*
+        echo "<pre>";
+        var_dump($_SESSION);
+        echo "</pre>";
+        */
     }
 
     //Add the user data to the hive
@@ -115,6 +141,7 @@ $f3->route('GET|POST /personalInfo', function($f3){
     $f3->set('age', $age);
     $f3->set('gender', $gender);
     $f3->set('phone', $phone);
+    $f3->set('premium', $premium);
 
     //Display the personal_info.html page
     $view = new Template();
@@ -125,7 +152,7 @@ $f3->route('GET|POST /personalInfo', function($f3){
 $f3->route('GET|POST /profile', function($f3){
     //Initialize variables for user input
     $email="";
-    $gender="";
+    $seeking="";
     $userState = "";
     $bio = "";
 
@@ -145,25 +172,39 @@ $f3->route('GET|POST /profile', function($f3){
         // Validate Info and add it to session //
         //is email valid
         if(validEmail($email)){
-            $_SESSION['email'] = $_POST['email'];
+            $_SESSION['member']->setEmail($email);
         }else{
             $f3->set('errors["email"]', 'Email is not valid. Must contain \'@\' and \'.\'');
         }
 
-        // Add data to session with no validation
-        $_SESSION['state'] = $_POST['state'];
-        $_SESSION['seeking'] = $_POST['seeking'];
-        $_SESSION['bio'] = $_POST['bio'];
+        // Add Seeking to session if value is correct
+        if($seeking == 'male' || $seeking == 'female'){
+            $_SESSION['member']->setSeeking($seeking);
+        }
+        else {
+            $f3->set('errors["seeking"]', 'Please, select seeking');
+        }
 
         if (empty($f3->get('errors'))) {
-            // Move user to the next page
-            header('location: interests');
+            // Add data to session with no validation if no errors previously
+            $_SESSION['member']->setState($userState);
+            $_SESSION['member']->setBio($bio);
+
+
+            // Move user to the interests page if premium
+            if ($_SESSION['member'] instanceof PremiumMember) {
+                header('location: interests');
+            }
+            // otherwise directly to summary
+            else{
+                header('location: summary');
+            }
         }
     }
 
     //Add the user data to the hive
     $f3->set('email', $email);
-    $f3->set('gender', $gender);
+    $f3->set('seeking', $seeking);
     $f3->set('userState', $userState);
     $f3->set('bio', $bio);
 
@@ -201,7 +242,7 @@ $f3->route('GET|POST /interests', function($f3){
         if(!empty($userIndoorInterests)) {
             if (validIndoor($userIndoorInterests)) {
                 // Add data to session
-                $_SESSION['userIndoorInterests'] = $_POST['indoorInterests'];
+                $_SESSION['member']->setInDoorInterests($userIndoorInterests);
             } else {
                 $f3->set('errors["indoor"]', 'Invalid selection');
             }
@@ -214,7 +255,7 @@ $f3->route('GET|POST /interests', function($f3){
         if(!empty($userOutdoorInterests)) {
             if (validOutdoor($userOutdoorInterests)) {
                 // Add data to session
-                $_SESSION['userOutdoorInterests'] = $_POST['outdoorInterests'];
+                $_SESSION['member']->setOutDoorInterests($userOutdoorInterests);
             } else {
                 $f3->set('errors["outdoor"]', 'Invalid selection');
             }
@@ -227,6 +268,7 @@ $f3->route('GET|POST /interests', function($f3){
             // Move user to the next page
             header('location: summary');
         }
+
     }
 
     //Get the indoor interests from the Model and send them to the View
@@ -249,7 +291,11 @@ $f3->route('GET|POST /summary', function(){
     $view = new Template();
     echo $view->render('views/summary.html');
 
-
+    /*
+    echo "<pre>";
+    var_dump($_SESSION);
+    echo "</pre>";
+    */
 });
 
 // Run Fat-Free

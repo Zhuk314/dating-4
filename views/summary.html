@@ -18,36 +18,35 @@
         <div class="row">
             <div class="col-6 p-4">
                 <div class="border p-1">
-                    <p class="mt-2 mb-2">Name: {{ @SESSION.fname }} {{ @SESSION.lname }}</p>
+                    <p class="mt-2 mb-2">Name: {{ @SESSION.member->getFname() }} {{ @SESSION.member->getLname() }}</p>
                 </div>
                 <div class="border p-1">
-                    <p class="mt-2 mb-2">Gender: {{ @SESSION.gender}}</p>
+                    <p class="mt-2 mb-2">Gender: {{ @SESSION.member->getGender()}}</p>
                 </div>
                 <div class="border p-1">
-                    <p class="mt-2 mb-2">Age: {{ @SESSION.age}}</p>
+                    <p class="mt-2 mb-2">Age: {{ @SESSION.member->getAge()}}</p>
                 </div>
                 <div class="border p-1">
-                    <p class="mt-2 mb-2">Phone: {{ @SESSION.phone}}</p>
+                    <p class="mt-2 mb-2">Phone: {{ @SESSION.member->getPhone()}}</p>
                 </div>
                 <div class="border p-1">
-                    <p class="mt-2 mb-2">Email: {{ @SESSION.email}}</p>
+                    <p class="mt-2 mb-2">Email: {{ @SESSION.member->getEmail()}}</p>
                 </div>
                 <div class="border p-1">
-                    <p class="mt-2 mb-2">State: {{ @SESSION.state}}</p>
+                    <p class="mt-2 mb-2">State: {{ @SESSION.member->getState()}}</p>
                 </div>
                 <div class="border p-1">
-                    <p class="mt-2 mb-2">Seeking: {{ @SESSION.seeking}}</p>
+                    <p class="mt-2 mb-2">Seeking: {{ @SESSION.member->getSeeking()}}</p>
                 </div>
-                <div class="border p-1">
-                    <p class="mt-2 mb-2">Interests:
-                        <repeat group="{{ @SESSION.userIndoorInterests }}" value="{{ @interest }}">
-                            <span>{{ trim(@interest) }},</span>
-                        </repeat>
-                        <repeat group="{{ @SESSION.userOutdoorInterests }}" value="{{ @interest }}">
-                            <span>{{ trim(@interest) }},</span>
-                        </repeat>
-                    </p>
-                </div>
+
+                <check if="{{ @SESSION.member instanceof PremiumMember }} == true">
+                    <div class="border p-1">
+                        <p class="mt-2 mb-2">Interests:
+                        <span>{{ implode(', ', @SESSION.member->getInDoorInterests()) }}</span>
+                        <span>{{ implode(', ', @SESSION.member->getOutDoorInterests()) }}</span>
+                        </p>
+                    </div>
+                </check>
             </div>
 
             <div class="col-6 p-4">
@@ -58,7 +57,7 @@
                 <div>
                     <h6>Bio:</h6>
                     <p class="text-justify">
-                        {{ @SESSION.bio}}
+                        {{ @SESSION.member->getBio()}}
                     </p>
                 </div>
             </div>
@@ -74,6 +73,6 @@
 
 </div><!-- End Container for main content -->
 
-
+<include href="views/includes/bottomLinks.html" />
 </body>
 </html>

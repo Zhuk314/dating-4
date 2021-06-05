@@ -52,19 +52,22 @@ File Name: profile.html
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="seeking"
                                        id="radioSeekingMale" value="male"
-                                <check if="{{ @gender == 'male' }}">checked="checked"</check>
+                                <check if="{{ @seeking == 'male' }}">checked="checked"</check>
                                 >
                                 <label class="form-check-label" for="radioSeekingMale">Male</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="seeking" id="radioSeekingFemale"
                                        value="female"
-                                <check if="{{ @gender == 'female' }}">checked="checked"</check>
+                                <check if="{{ @seeking == 'female' }}">checked="checked"</check>
                                 >
                                 <label class="form-check-label" for="radioSeekingFemale">Female</label>
                             </div>
                         </div>
                     </div>
+                    <check if="{{ isset(@errors['seeking']) }}">
+                        <span class="text-danger">{{ @errors['seeking'] }}</span>
+                    </check>
                 </div>
 
                 <!--Right field-->
@@ -84,6 +87,6 @@ File Name: profile.html
 
 </div><!-- End Container for main content -->
 
-
+<include href="views/includes/bottomLinks.html" />
 </body>
 </html>
